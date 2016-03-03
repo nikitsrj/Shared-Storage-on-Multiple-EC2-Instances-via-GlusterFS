@@ -152,22 +152,34 @@ Launch the instance with in same network. And provide the 2 GB EBS and SSH to it
 Let’s say the public IP of third Instance is 54.169.172.27
 Then do the following operation on the Terminal 
 \#ssh –i “key.pem” ec2-user@54.169.172.27
+
 \# yum update –y
+
 \#yum install wget –y
+
 \#wget http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
+
 \#rpm -ivh epel-release-7-5.noarch.rpm
+
 \#wget -P /etc/yum.repos.d http://download.gluster.org/pub/gluster/glusterfs/LATEST/EPEL.repo/glusterfs-epel.repo
+
 \#yum install glusterfs* -y –skip-broken
+
 \#systemctl enable glusterd
+
 \#systemctl start glusterd
+
 \#chkconfig glusterd on
+
 
 _Configure the volume to be mounted at boot time:_
 
 \#mkdir -p /mnt/ebs
 
 **_GO into the Master Gluster Instance and add the third instance to its gluster list by probing the ip of third instance._**
+
 \# gluster peer probe 172.31.9.58            => Private ip of the third instance.
+
 \# gluster volume add-brick gv1 replica 3 172.31.9.58:/mnt/ebs force  => Adding the third instance mount point to gv1
 
 Now go to third Instance and Navigate to /mnt/ebs and do ls then you will find every data which was in Master Gluster Instance and Instance 2 will be also updated to Instance 3.
